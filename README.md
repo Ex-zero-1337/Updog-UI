@@ -25,7 +25,7 @@ Huge thanks to [sc0tfree/updog](https://github.com/sc0tfree/updog) for the origi
 ## Current Support
 
 - Serve a directory over HTTP.
-- Upload one or multiple files from the browser.
+- Upload one or multiple files from the browser with a reviewable selection queue.
 - Download any served file.
 - Search and sort directory entries with DataTables.
 - Password-protect access with HTTP basic auth.
@@ -36,6 +36,8 @@ Huge thanks to [sc0tfree/updog](https://github.com/sc0tfree/updog) for the origi
 ## Enhancements In This Fork
 
 - Modern responsive UI with a cleaner header, stats, upload controls, and compact file rows.
+- Upload queue that shows selected files before upload, supports per-file removal, and keeps previous selections when choosing more files.
+- Upload progress bar with percentage feedback during transfer.
 - Per-file actions: `Preview`, `Download`, or `No preview` depending on extension support.
 - Rendered Markdown previews for `.md` and `.markdown`.
 - Sandboxed HTML previews for `.html` and `.htm`.
@@ -54,12 +56,31 @@ Huge thanks to [sc0tfree/updog](https://github.com/sc0tfree/updog) for the origi
 | Browser-native media | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`, `.bmp`, `.ico`, `.pdf`, `.mp3`, `.wav`, `.ogg`, `.m4a`, `.mp4`, `.webm`, `.mov` | Opened through the browser's native viewer |
 | Other files | Any unsupported extension | Download only, with `No preview` shown in the UI |
 
+## Upload Workflow
+
+The beautified upload flow is designed to prevent accidental uploads:
+
+1. Click `Choose files` to select one or more files.
+2. Review the selected-file list before uploading.
+3. Click the `x` button beside any file to remove it from the upload queue.
+4. Click `Choose files` again to add more files without clearing the existing queue.
+5. Click `Clear` to remove the entire queue.
+6. Click `Upload` to start the transfer and watch the progress bar/percentage.
+
+When every selected file is removed, the selection queue and upload progress area are hidden automatically.
+
 ## Installation
 
 Install from the project directory:
 
 ```bash
 python3 -m venv .venv
+.venv/bin/python -m pip install .
+```
+
+For editable development:
+
+```bash
 .venv/bin/python -m pip install -e .
 ```
 

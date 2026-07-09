@@ -47,6 +47,22 @@
                     <i class="fas fa-arrow-up"></i>
                     <span>Upload</span>
                 </button>
+                <div class="upload-queue" aria-live="polite" hidden>
+                    <div class="upload-queue-head">
+                        <span class="upload-queue-title">Selected files</span>
+                        <button type="button" class="upload-clear-button">Clear</button>
+                    </div>
+                    <ul class="upload-file-list"></ul>
+                </div>
+                <div class="upload-progress" aria-live="polite" hidden>
+                    <div class="upload-progress-meta">
+                        <span class="upload-progress-label">Uploading</span>
+                        <span class="upload-progress-percent">0%</span>
+                    </div>
+                    <div class="upload-progress-track">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                </div>
             </form>
 
             {% if is_subdirectory %}
