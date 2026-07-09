@@ -5,6 +5,8 @@ import argparse
 from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort
 from flask_httpauth import HTTPBasicAuth
 from flask_cors import CORS
+import bleach
+import markdown
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.serving import run_simple
@@ -12,6 +14,25 @@ from werkzeug.serving import run_simple
 from updog.utils.path import is_valid_subpath, is_valid_upload_path, get_parent_directory, process_files
 from updog.utils.output import error, info, warn, success
 from updog import version as VERSION
+
+
+MARKDOWN_EXTENSIONS = {'.md', '.markdown'}
+HTML_EXTENSIONS = {'.html', '.htm'}
+TEXT_PREVIEW_EXTENSIONS = {
+    '.txt', '.css', '.js', '.mjs', '.json', '.xml', '.csv', '.log',
+    '.yml', '.yaml', '.ini', '.cfg', '.conf', '.py', '.rb', '.go',
+    '.rs', '.java', '.c', '.h', '.cpp', '.hpp', '.cs', '.sh', '.zsh',
+    '.bash', '.sql', '.toml'
+}
+MARKDOWN_ALLOWED_TAGS = set(bleach.sanitizer.ALLOWED_TAGS).union({
+    'p', 'pre', 'span', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td', 'img', 'hr'
+})
+MARKDOWN_ALLOWED_ATTRIBUTES = {
+    '*': ['class'],
+    'a': ['href', 'title'],
+    'img': ['src', 'alt', 'title']
+}
 
 
 def read_write_directory(directory):
@@ -48,6 +69,43 @@ def parse_arguments():
     args.directory = os.path.abspath(args.directory)
 
     return args
+
+
+def read_text_file(path):
+    with open(path, 'r', encoding='utf-8', errors='replace') as text_file:
+        return text_file.read()
+
+
+def render_preview_file(path, display_path, extension):
+    file_text = read_text_file(path)
+
+    if extension in MARKDOWN_EXTENSIONS:
+        rendered_content = markdown.markdown(
+            file_text,
+            extensions=['extra', 'sane_lists', 'nl2br'],
+            output_format='html5'
+        )
+        rendered_content = bleach.clean(
+            rendered_content,
+            tags=MARKDOWN_ALLOWED_TAGS,
+            attributes=MARKDOWN_ALLOWED_ATTRIBUTES,
+            protocols=['http', 'https', 'mailto'],
+            strip=True
+        )
+        preview_type = 'markdown'
+    elif extension in HTML_EXTENSIONS:
+        rendered_content = file_text
+        preview_type = 'html'
+    else:
+        rendered_content = file_text
+        preview_type = 'text'
+
+    return render_template('preview.html',
+                           content=rendered_content,
+                           filename=os.path.basename(path),
+                           directory=display_path,
+                           preview_type=preview_type,
+                           version=VERSION)
 
 
 def main():
@@ -97,6 +155,16 @@ def main():
 
                 # Check if file extension
                 (filename, extension) = os.path.splitext(requested_path)
+                extension = extension.lower()
+                if send_as_attachment is False and extension in MARKDOWN_EXTENSIONS.union(HTML_EXTENSIONS, TEXT_PREVIEW_EXTENSIONS):
+                    try:
+                        display_path = requested_path
+                        if args.hide_base_path:
+                            display_path = requested_path[len(base_directory):] or '/'
+                        return render_preview_file(requested_path, display_path, extension)
+                    except PermissionError:
+                        abort(403, 'Read Permission Denied: ' + requested_path)
+
                 if extension == '':
                     mimetype = 'text/plain'
                 else:
