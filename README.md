@@ -16,11 +16,11 @@ Huge thanks to [sc0tfree/updog](https://github.com/sc0tfree/updog) for the origi
 
 ### Latest Directory UI
 
-![Updog directory UI](assets/screenshots/updog-directory.png)
+![Updog UI](assets/new-ui.png)
 
 ### Preview Sample
 
-![Updog Markdown preview](assets/screenshots/updog-preview-markdown.png)
+![Updog Markdown preview](assets/preview.png)
 
 ## Current Support
 
