@@ -4,20 +4,40 @@ from math import log2
 from time import ctime
 
 
+PREVIEW_EXTENSIONS = {
+    '.txt', '.md', '.markdown', '.html', '.htm', '.css', '.js', '.mjs',
+    '.json', '.xml', '.csv', '.log', '.yml', '.yaml', '.ini', '.cfg',
+    '.conf', '.py', '.rb', '.go', '.rs', '.java', '.c', '.h', '.cpp',
+    '.hpp', '.cs', '.sh', '.zsh', '.bash', '.sql', '.toml',
+    '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.bmp', '.ico',
+    '.pdf',
+    '.mp3', '.wav', '.ogg', '.m4a',
+    '.mp4', '.webm', '.mov'
+}
+
+
+def is_inside_base(path, base_directory):
+    try:
+        base_path = os.path.abspath(base_directory)
+        target_path = os.path.abspath(path)
+        return os.path.commonpath([base_path, target_path]) == base_path
+    except ValueError:
+        return False
+
+
 def is_valid_subpath(relative_directory, base_directory):
     in_question = os.path.abspath(os.path.join(base_directory, relative_directory))
-    return os.path.commonprefix([base_directory, in_question]) == base_directory
+    return is_inside_base(in_question, base_directory)
 
 
 def is_valid_upload_path(path, base_directory):
     if path == '':
         return False
-    in_question = os.path.abspath(path)
-    return os.path.commonprefix([base_directory, in_question]) == base_directory
+    return is_inside_base(path, base_directory)
 
 
 def get_relative_path(file_path, base_directory):
-    return file_path.split(os.path.commonprefix([base_directory, file_path]))[1][1:]
+    return os.path.relpath(file_path, base_directory)
 
 
 def human_readable_file_size(size):
@@ -31,16 +51,22 @@ def human_readable_file_size(size):
 def process_files(directory_files, base_directory):
     files = []
     for file in directory_files:
+        extension = ''
+        can_preview = False
         if file.is_dir():
             size = '--'
             size_sort = -1
         else:
+            extension = os.path.splitext(file.name)[1].lower()
+            can_preview = extension in PREVIEW_EXTENSIONS
             size = human_readable_file_size(file.stat().st_size)
             size_sort = file.stat().st_size
         files.append({
             'name': file.name,
             'is_dir': file.is_dir(),
             'rel_path': get_relative_path(file.path, base_directory),
+            'extension': extension,
+            'can_preview': can_preview,
             'size': size,
             'size_sort': size_sort,
             'last_modified': ctime(file.stat().st_mtime),

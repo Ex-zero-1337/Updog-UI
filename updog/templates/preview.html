@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>updog preview - {{ filename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome-5.1/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+</head>
+
+<body>
+<div class="app-shell">
+    <header id="header" class="hero-panel preview-hero">
+        <button onclick="history.back()" class="brand-mark" aria-label="Go back">
+            <img src="{{ url_for('static', filename='images/updog.png') }}" alt="updog">
+        </button>
+
+        <div class="hero-copy">
+            <p class="eyebrow">{{ preview_type }} preview</p>
+            <h1>{{ filename }}</h1>
+            <div class="hero-meta" aria-label="Preview actions">
+                <a href="{{ request.path }}" class="meta-action">
+                    <i class="fas fa-download"></i>
+                    <span>Download</span>
+                </a>
+                <a href="javascript:history.back()" class="meta-action">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <article class="preview-panel">
+            {% if preview_type == 'markdown' %}
+            <div class="markdown-body">
+                {{ content|safe }}
+            </div>
+            {% elif preview_type == 'html' %}
+            <iframe class="html-preview-frame"
+                    title="{{ filename }} preview"
+                    sandbox
+                    referrerpolicy="no-referrer"
+                    srcdoc="{{ content }}"></iframe>
+            {% else %}
+            <pre class="text-preview"><code>{{ content }}</code></pre>
+            {% endif %}
+        </article>
+    </main>
+
+    <footer>
+        <p>updog v{{ version }}</p>
+    </footer>
+</div>
+</body>
+</html>
