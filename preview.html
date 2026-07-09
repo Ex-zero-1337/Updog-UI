@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>updog preview</title>
+    <link rel="stylesheet" href="updog/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="updog/static/vendor/fontawesome-5.1/css/all.min.css">
+    <link rel="stylesheet" href="updog/static/vendor/datatable/datatables.min.css">
+    <link rel="stylesheet" href="updog/static/css/style.min.css">
+</head>
+
+<body>
+<div class="app-shell">
+    <header id="header" class="hero-panel">
+        <button onclick="document.location='preview.html'" class="brand-mark" aria-label="Go to root directory">
+            <img src="updog/static/images/updog.png" alt="updog">
+        </button>
+
+        <div class="hero-copy">
+            <p class="eyebrow">updog file server</p>
+            <h1>/Users/user/Documents/Application-dev/updog</h1>
+            <div class="hero-meta" aria-label="Directory summary">
+                <span><i class="far fa-folder"></i>3 folders</span>
+                <span><i class="far fa-file"></i>5 files</span>
+                <span><i class="fas fa-bolt"></i>v2.0.1</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="toolbar-panel" aria-label="File actions">
+            <form method="post" action="#" enctype="multipart/form-data" class="upload-form">
+                <div class="upload-dropzone">
+                    <input type="file" name="file" id="file" class="uploadFile"
+                           data-multiple-caption="{count} files selected" multiple>
+                    <label for="file">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choose files</span>
+                    </label>
+                    <input type="hidden" name="path" value="/Users/user/Documents/Application-dev/updog">
+                </div>
+                <button type="button" class="upload-button">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Upload</span>
+                </button>
+            </form>
+
+            <a class="back-link" href="#">
+                <i class="fas fa-level-up-alt"></i>
+                <span>Parent folder</span>
+            </a>
+        </section>
+
+        <section class="table-panel">
+            <div class="table-heading">
+                <div>
+                    <p class="eyebrow">Current directory</p>
+                    <h2>Browse files</h2>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="tableData" class="table compact">
+                    <thead>
+                    <tr>
+                        <th width="4%"><span class="sr-only">Type</span></th>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Last Modified</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td data-label="Type"><span class="file-icon folder"><i class="far fa-folder"></i></span></td>
+                        <td data-label="Name"><a class="file-name" href="#">updog/</a></td>
+                        <td data-label="Size" data-order="-1">--</td>
+                        <td data-label="Last Modified" data-order="1783604000">Thu Jul 9 17:30:00 2026</td>
+                        <td data-label="Action"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Type"><span class="file-icon folder"><i class="far fa-folder"></i></span></td>
+                        <td data-label="Name"><a class="file-name" href="#">assets/</a></td>
+                        <td data-label="Size" data-order="-1">--</td>
+                        <td data-label="Last Modified" data-order="1783603700">Thu Jul 9 17:25:00 2026</td>
+                        <td data-label="Action"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Type"><span class="file-icon file"><i class="far fa-file"></i></span></td>
+                        <td data-label="Name"><a class="file-name" href="#">README.md</a></td>
+                        <td data-label="Size" data-order="3185">3.11 KB</td>
+                        <td data-label="Last Modified" data-order="1783603100">Thu Jul 9 17:15:00 2026</td>
+                        <td data-label="Action"><a class="view-link" href="#"><i class="far fa-eye"></i><span>View</span></a></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Type"><span class="file-icon file"><i class="far fa-file"></i></span></td>
+                        <td data-label="Name"><a class="file-name" href="#">pyproject.toml</a></td>
+                        <td data-label="Size" data-order="1687">1.65 KB</td>
+                        <td data-label="Last Modified" data-order="1783602500">Thu Jul 9 17:05:00 2026</td>
+                        <td data-label="Action"><a class="view-link" href="#"><i class="far fa-eye"></i><span>View</span></a></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Type"><span class="file-icon file"><i class="far fa-file"></i></span></td>
+                        <td data-label="Name"><a class="file-name" href="#">poetry.lock</a></td>
+                        <td data-label="Size" data-order="40308">39.36 KB</td>
+                        <td data-label="Last Modified" data-order="1783602200">Thu Jul 9 17:00:00 2026</td>
+                        <td data-label="Action"><a class="view-link" href="#"><i class="far fa-eye"></i><span>View</span></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>updog v2.0.1</p>
+    </footer>
+</div>
+
+<script src="updog/static/js/jquery-3.7.1.min.js"></script>
+<script src="updog/static/js/bootstrap.bundle.min.js"></script>
+<script src="updog/static/vendor/datatable/datatables.min.js"></script>
+<script src="updog/static/js/main.js"></script>
+</body>
+</html>

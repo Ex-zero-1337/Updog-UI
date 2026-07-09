@@ -42,6 +42,8 @@ flask-httpauth = "^4.8.0"
 werkzeug = "^3.0"
 pyopenssl = "^24.0"
 flask-cors = "^6.0.1"
+markdown = "^3.6"
+bleach = "^6.1"
 
 [tool.poetry.scripts]
 updog = "updog.__main__:main"
@@ -49,4 +51,3 @@ updog = "updog.__main__:main"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
